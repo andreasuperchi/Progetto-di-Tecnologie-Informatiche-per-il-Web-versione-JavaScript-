@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringEscapeUtils;
+
 import it.polimi.tiw_exam_js.DAO.UtenteDAO;
 import it.polimi.tiw_exam_js.beans.Utente;
 import it.polimi.tiw_exam_js.utils.ConnectionHandler;
@@ -26,7 +28,7 @@ public class CheckLogin extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
     
-    public void init() {
+    public void init() throws ServletException {
     	connection = ConnectionHandler.getConnection(getServletContext());
     }
 	
@@ -37,9 +39,14 @@ public class CheckLogin extends HttpServlet {
 
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String username = request.getParameter("username"); // mi salvo gli attributi che mi arrivano dalla request
-		String password = request.getParameter("password");
+		String username = StringEscapeUtils.escapeJava(request.getParameter("username")); // mi salvo gli attributi che mi arrivano dalla request
+		String password = StringEscapeUtils.escapeJava(request.getParameter("password"));
 		
+		if (username == null || password == null || username.isEmpty() || password.isEmpty() ) {
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.getWriter().println("I campi username e password non possono essere vuoti");
+			return;
+		}
 		
 		UtenteDAO userDAO = new UtenteDAO(connection);
 		Utente userBean = null;
@@ -50,21 +57,30 @@ public class CheckLogin extends HttpServlet {
 			response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Errore nel controllo credenziali!");
 		}
 
-		String path = getServletContext().getContextPath(); // mi salvo il path di "default"
 
 		if (userBean == null) {
-			path = getServletContext().getContextPath() + "/index.html"; // se la creazione del bean fallisce,
+			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+			response.getWriter().println("username o passowrd errati"); // se la creazione del bean fallisce,
 																			// reindirizzo alla homepage
 		} else {
 			request.getSession().setAttribute("utente", userBean); // salvo nella sessione, nel campo user, il bean appena
-																	// creato
-			String target = "/GoToHomePage";
-			path = path + target; // costruisco il path completo
+			response.setStatus(HttpServletResponse.SC_OK);
+			response.setContentType("application/json");
+			response.setCharacterEncoding("UTF-8");
+			response.getWriter().println(username);														// creato	
 		}
 
-		response.sendRedirect(path); // redirigo l'utente alla corretta homepage
+		
 	}
 	
+	public void destroy() {
+		try {
+			ConnectionHandler.closeConnection(connection);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
+
 }
+
