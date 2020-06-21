@@ -7,10 +7,9 @@ function asyncCall(method, url, formElement, cback, reset = true) {
 	    if (formElement == null) {
 	      request.send();
 	    } else {
-	    	console.log(new FormData(formElement));
 	      request.send(new FormData(formElement));
 	    }
 	    if (formElement !== null && reset === true) {
 	      formElement.reset();
 	    }
-	    }
+}
