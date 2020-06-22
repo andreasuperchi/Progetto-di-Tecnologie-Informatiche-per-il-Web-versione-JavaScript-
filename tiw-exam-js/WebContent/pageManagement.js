@@ -36,7 +36,7 @@
 	    
 	    this.update = function(arrayRiunioni){
 	    	var l = arrayRiunioni.lenght,
-	    		row, idCell, dataCell, oraCell, durataCell, numCell, hostCell;
+	    		row, idCell, titoloCell, dataCell, oraCell, durataCell, numCell, hostCell;
 	    	if(l == 0){
 	    		alert.textContent = "Non ci sono Riunioni";
 	    	}else{
@@ -47,6 +47,9 @@
 	    			idCell = document.createElement("td");
 	    			idCell.textContent = riunione.id;
 	    			row.appendChild(idCell);
+	    			titoloCell = document.createElement("td");
+	    			titoloCell.textContent = riunione.titolo;
+	    			row.appendChild(titoloCell);
 	    			dataCell = document.createElement("td");
 	    			dataCell.textContent = riunione.data;
 	    			row.appendChild(dataCell);
