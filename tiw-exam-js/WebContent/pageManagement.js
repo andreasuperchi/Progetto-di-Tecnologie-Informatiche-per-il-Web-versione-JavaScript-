@@ -38,7 +38,7 @@
 	    
 	    this.update = function(arrayRiunioni){
 	    	var l = arrayRiunioni.lenght,
-	    		row, cell;
+	    		row, idCell, dataCell, oraCell, durataCell, numCell, hostCell;
 	    	if(l == 0){
 	    		alert.textContent = "Non ci sono Riunioni";
 	    	}else{
@@ -46,9 +46,24 @@
 	    		var self = this;
 	    		arrayRiunioni.forEach(function(riunione){
 	    			row = document.createElement("tr");
-	    			cell = document.createEleemnt("td");
-	    			cell.textContent = riunione.id;
-	    			row.appendChild(cell);
+	    			idCell = document.createEleemnt("td");
+	    			idCell.textContent = riunione.id;
+	    			row.appendChild(idCell);
+	    			dataCell = document.createElementById("td");
+	    			dataCell.textContent = riunione.data;
+	    			row.appendChild(dataCell);
+	    			oraCell = document.createElementById("td");
+	    			oraCell.textContent = riunione.ora;
+	    			row.appendChild(oraCell);
+	    			durataCell = document.createElementById("td");
+	    			durataCell.textContent = riunione.durata;
+	    			row.appendChild(durataCell);
+	    			numCell = document.createElementById("td");
+	    			numCell.textContent = riunione.num_max_partecipanti;
+	    			row.appendChild(numCell);
+	    			hostCell = document.createElementById("td");
+	    			hostCell.textContent = riunione.host;
+	    			row.appendChild(host);
 	    			self.appendChild(row);
 	    		})
 	    	}
@@ -57,4 +72,16 @@
 	    
 	    
 	}
+	
+	
+	
+	function PageOrchestrator(){
+		var alertcontainer = document.getElementById("id_alert");
+		this.start = function(){
+			listaRiunioniInvitato = new ListaRiunioniInvitato(alertContainer,
+					document.getElementById("id_riunioni_invitato"),
+					document.getElementById("id_riunioni_invitato_body"));
+			}
+		
+	    }
 })
