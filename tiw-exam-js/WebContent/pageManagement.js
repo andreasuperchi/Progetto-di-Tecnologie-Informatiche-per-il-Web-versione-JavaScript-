@@ -136,6 +136,10 @@
 	    	this.listcontainer.style.visibility = "visible";
 	    }
 	}
+	
+	function CreaRiunione(){
+		
+	}
 
 	
 	
