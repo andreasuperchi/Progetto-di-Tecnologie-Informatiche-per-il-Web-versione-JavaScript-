@@ -5,9 +5,6 @@
 		pageOrchestrator.start();
 	}, false);
 	
-	
-	
-	
 	function ListaRiunioniInvitato (_alert, _listcontainer, _listcontainerbody){
 	    this.alert = _alert
 		this.listcontainer = _listcontainer;
@@ -32,7 +29,8 @@
     						self.alert.textContent = message;
     					}
 	    			}
-	    	} );
+	    		}
+	    	);
 	    };
 	    
 	    this.update = function(arrayRiunioni){
@@ -64,13 +62,10 @@
 	    			hostCell.textContent = riunione.host;
 	    			row.appendChild(host);
 	    			self.appendChild(row);
-	    		})
+	    		});
 	    	}
 	    	this.listcontainer.style.visibility = "visible";
-	    }
-	    
-	    
-	    
+	    }  
 	}
 	
 	
@@ -81,7 +76,6 @@
 			listaRiunioniInvitato = new ListaRiunioniInvitato(alertContainer,
 					document.getElementById("id_riunioni_invitato"),
 					document.getElementById("id_riunioni_invitato_body"));
-			}
-		
-	    }
+			};
+	}
 })();
