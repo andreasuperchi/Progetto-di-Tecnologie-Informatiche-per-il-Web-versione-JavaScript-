@@ -67,8 +67,73 @@
 	    			row.appendChild(hostCell);
 	    			self.listcontainerbody.appendChild(row);
 	    		});
-	    		this.listcontainer.style.visibility = "visible";
+	    		
 	    	}  
+	    	this.listcontainer.style.visibility = "visible";
+	    }
+	}
+	
+	function ListaRiunioniIndette(_alert, _listcontainer, _listcontainerbody){
+		this.alert = _alert
+		this.listcontainer = _listcontainer;
+	    this.listcontainerbody = _listcontainerbody;
+		
+	    this.reset = function(){
+	    	this.listcontainer.style.visibility = "hidden";
+	    }
+	    
+	    this.show = function(next){								//Recupera la lista delle riunioni a cui è stato invitato l'utente
+	    	var self = this;
+	    	asyncCall("GET",'GetRiunioniIndette', null, 
+	    		function (request){
+	    			if(request.readyState == 4){
+	    				var message = request.responseText;
+	    				if(request.status == 200){
+	    					self.update(JSON.parse(request.responseText));
+	    					if(next){
+	    						next();
+	    					}
+	    				}else{
+    						self.alert.textContent = message;
+    					}
+	    			}
+	    		}
+	    	);
+	    };
+	    
+	    this.update = function(arrayRiunioni){
+	    	var l = arrayRiunioni.lenght,
+	    		row, idCell, titoloCell, dataCell, oraCell, durataCell, numCell;
+	    	if(l == 0){
+	    		alert.textContent = "Non ci sono Riunioni";
+	    	}else{
+	    		this.listcontainerbody.innerHTML = "";
+	    		var self = this;
+	    		arrayRiunioni.forEach(function(riunione){
+	    			row = document.createElement("tr");
+	    			idCell = document.createElement("td");
+	    			idCell.textContent = riunione.id;
+	    			row.appendChild(idCell);
+	    			titoloCell = document.createElement("td");
+	    			titoloCell.textContent = riunione.titolo;
+	    			row.appendChild(titoloCell);
+	    			dataCell = document.createElement("td");
+	    			dataCell.textContent = riunione.data;
+	    			row.appendChild(dataCell);
+	    			oraCell = document.createElement("td");
+	    			oraCell.textContent = riunione.ora;
+	    			row.appendChild(oraCell);
+	    			durataCell = document.createElement("td");
+	    			durataCell.textContent = riunione.durata;
+	    			row.appendChild(durataCell);
+	    			numCell = document.createElement("td");
+	    			numCell.textContent = riunione.num_max_partecipanti;
+	    			row.appendChild(numCell);
+	    			self.listcontainerbody.appendChild(row);
+	    		});
+	    		
+	    	}  
+	    	this.listcontainer.style.visibility = "visible";
 	    }
 	}
 
@@ -82,11 +147,19 @@
 					alertContainer,
 					document.getElementById("id_riunioni_invitato"),
 					document.getElementById("id_riunioni_invitato_body"));
+			
+			listaRiunioniIndette = new ListaRiunioniIndette(
+					alertContainer,
+					document.getElementById("id_riunioni_indette"),
+					document.getElementById("id_riunioni_indette_body"));
 		};
 		
 		this.refresh = function() {
 			listaRiunioniInvitato.reset();
 			listaRiunioniInvitato.show();
+			
+			listaRiunioniIndette.reset();
+			listaRiunioniIndette.show();
 		};
 	}
 })();
