@@ -20,7 +20,7 @@
 	    
 	    this.show = function(next){								//Recupera la lista delle riunioni a cui è stato invitato l'utente
 	    	this.self = this;
-	    	asyncCall("GET","GetRiunioniInvitato", null, 
+	    	asyncCall("GET",'GetRiunioniInvitato', null, 
 	    		function (request){
 	    			if(request.readyState == 4){
 	    				var message = request.responseText;
@@ -28,10 +28,10 @@
 	    					self.update(JSON.parse(request.responseText));
 	    					if(next){
 	    						next();
-	    					}else{
-	    						self.alert.textContent = message;
 	    					}
-	    				}
+	    				}else{
+    						self.alert.textContent = message;
+    					}
 	    			}
 	    	} );
 	    };
@@ -67,6 +67,7 @@
 	    			self.appendChild(row);
 	    		})
 	    	}
+	    	this.listcontainer.style.visibility = "visible";
 	    }
 	    
 	    
