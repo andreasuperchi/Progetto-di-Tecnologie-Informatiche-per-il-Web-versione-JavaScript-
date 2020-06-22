@@ -160,7 +160,7 @@ public class UtenteDAO {
 					riunione.setDurata(result.getString("durata"));
 					riunione.setNum_max_partecipanti(result.getInt("num_max_partecipanti"));
 					riunione.setHost(result.getInt("host"));
-					
+				
 					invitoRiunioni.add(riunione);
 				}
 			}

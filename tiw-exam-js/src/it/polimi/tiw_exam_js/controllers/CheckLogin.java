@@ -56,7 +56,7 @@ public class CheckLogin extends HttpServlet {
 
 		if (userBean == null) {
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-			response.getWriter().println("username o passowrd errati"); // se la creazione del bean fallisce,
+			response.getWriter().println("Username e/o password errati!"); // se la creazione del bean fallisce,
 																			// reindirizzo alla homepage
 		} else {
 			request.getSession().setAttribute("utente", userBean); // salvo nella sessione, nel campo user, il bean appena
