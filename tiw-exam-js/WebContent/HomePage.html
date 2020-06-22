@@ -2,71 +2,33 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="ISO-8859-1">
-<title>Home Page</title>
+<title>Pagina Home</title>
 <script src="utils.js" charset="utf-8" defer></script>
 <script src="pageManagement.js" charset="utf-8" defer></script>
 </head>
 <body>
 	<div align="right">
-			<a th:href="@{/Logout}">Logout</a>
-		</div>
-	<h1>Riunioni a cui sei stato invitato</h1>
-	<table id ="riunioniInvitato" class = "boxed" border = "1">
-		<thead>
-			<tr>
-				<th> Id  </th>
-				<th> Titolo </th>
-				<th> Data </th>
-				<th> Ora </th>
-				<th> Durata </th>
-				<th> Numero Max Partecipanti </th>
-				<th> Host </th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr th:each="ri : ${riunioniInvitato}">
-				<td th:text="${ri.id}"></td>
-				<td th:text = "${ri.titolo}"> </td>
-				<td th:text = "${ri.data}"> </td>
-				<td th:text = "${ri.ora}"> </td>
-				<td th:text = "${ri.durata}"> </td>
-				<td th:text = "${ri.num_max_partecipanti}"> </td>
-				<td th:text = "${ri.host}"> </td>
-			</tr>
-		</tbody>
+			<a href="/Logout">Logout</a>
+	</div>
+	<h1>Queste sono le riunioni a cui sei stato invitato:</h1>
+	<div id="id_alert" class="alertmessage"></div>
+	<table>
+		<tr>
+			<td>
+				<table id="id_riunioni_invitato">
+					<thead>
+						<tr>
+							<th>Titolo</th>
+							<th>Data</th>
+							<th>Ora</th>
+							<th>Durata</th>
+							<th>Numero Max Partecipanti</th>
+							<th>Host</th>
+						</tr>
+					</thead>
+					<tbody id="id_riunioni_invitato_body">
+					</tbody>
+				</table>
 	</table>
-	
-	<h1>Riunioni da te indette</h1>
-	<table border = "1">
-		<thead>
-			<tr>
-				<th> Id  </th>
-				<th> Titolo </th>
-				<th> Data </th>
-				<th> Ora </th>
-				<th> Durata </th>
-				<th> Numero Max Partecipanti </th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr th:each="rid : ${riunioniIndette}">
-				<td th:text="${rid.id}"></td>
-				<td th:text = "${rid.titolo}"> </td>
-				<td th:text = "${rid.data}"> </td>
-				<td th:text = "${rid.ora}"> </td>
-				<td th:text = "${rid.durata}"> </td>
-				<td th:text = "${rid.num_max_partecipanti}"> </td>
-			</tr>
-		</tbody>
-	</table>
-	<h1>Crea una nuova riunione</h1>
-	<form th:action="@{/GoToAnagrafica}" method="POST">
-		Titolo: <input type="text" name="titolo" required> <br>
-		Data: <input type="date" name ="data" required> <br> 
-		Ora: <input type="time" name = "ora" required><br>
-		Durata: <input type="time" name= "durata" required><br>
-		Numero Max Partecipanti: <input type="number" name="numero_max_partecipanti" required><br>
-			<input type="submit" value="Crea Riunione">
-	</form>
 </body>
 </html>
