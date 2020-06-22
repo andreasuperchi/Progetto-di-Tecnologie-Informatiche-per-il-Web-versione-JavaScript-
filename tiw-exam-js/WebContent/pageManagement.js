@@ -78,7 +78,8 @@
 	function PageOrchestrator(){
 		var alertContainer = document.getElementById("id_alert");
 		this.start = function(){
-			listaRiunioniInvitato = new ListaRiunioniInvitato(alertContainer,
+			listaRiunioniInvitato = new ListaRiunioniInvitato(
+					alertContainer,
 					document.getElementById("id_riunioni_invitato"),
 					document.getElementById("id_riunioni_invitato_body"));
 		};

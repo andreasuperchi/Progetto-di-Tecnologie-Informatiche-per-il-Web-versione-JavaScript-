@@ -40,7 +40,7 @@ public class GetRiunioniInvitato extends HttpServlet {
 		List<Riunione> riunioniInvitato = new ArrayList<Riunione>();
 		
 		try {
-			riunioniInvitato = uDAO.trovaMieRiunioni(utente.getId());	//recupero le riunioni a l'utente è stato invitato
+			riunioniInvitato = uDAO.trovaRiunioniACuiSonoStatoInvitato(utente.getId());	//recupero le riunioni a l'utente è stato invitato
 		} catch(SQLException e) {
 			e.printStackTrace();
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
