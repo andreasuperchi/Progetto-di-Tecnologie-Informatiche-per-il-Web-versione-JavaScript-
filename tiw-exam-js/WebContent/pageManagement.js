@@ -3,7 +3,6 @@
 	
 	window.addEventListener("load", () =>{
 		pageOrchestrator.start();
-		pageOrchestrator.refresh();
 	}, false);
 	
 	
@@ -77,7 +76,7 @@
 	
 	
 	function PageOrchestrator(){
-		var alertcontainer = document.getElementById("id_alert");
+		var alertContainer = document.getElementById("id_alert");
 		this.start = function(){
 			listaRiunioniInvitato = new ListaRiunioniInvitato(alertContainer,
 					document.getElementById("id_riunioni_invitato"),
@@ -85,4 +84,4 @@
 			}
 		
 	    }
-})
+})();
