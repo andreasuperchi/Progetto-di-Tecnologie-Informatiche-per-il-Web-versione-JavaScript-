@@ -6,7 +6,10 @@
 		pageOrchestrator.refresh();
 	}, false);
 	
-	function ListaRiunioni (_alert, _listcontainer, _listcontainerbody){
+	
+	
+	
+	function ListaRiunioniInvitato (_alert, _listcontainer, _listcontainerbody){
 	    this.alert = _alert
 		this.listcontainer = _listcontainer;
 	    this.listcontainerbody = _listcontainerbod
@@ -17,7 +20,7 @@
 	    
 	    this.show = function(next){								//Recupera la lista delle riunioni a cui è stato invitato l'utente
 	    	this.self = this;
-	    	asyncCall("GET","GetRiuonioniInvitato", null, 
+	    	asyncCall("GET","GetRiunioniInvitato", null, 
 	    		function (request){
 	    			if(request.readyState == 4){
 	    				var message = request.responseText;
@@ -32,6 +35,24 @@
 	    			}
 	    	} );
 	    };
+	    
+	    this.update = function(arrayRiunioni){
+	    	var l = arrayRiunioni.lenght,
+	    		row, cell;
+	    	if(l == 0){
+	    		alert.textContent = "Non ci sono Riunioni";
+	    	}else{
+	    		this.listcontainerbody.innerHTML = "";
+	    		var self = this;
+	    		arrayRiunioni.forEach(function(riunione){
+	    			row = document.createElement("tr");
+	    			cell = document.createEleemnt("td");
+	    			cell.textContent = riunione.id;
+	    			row.appendChild(cell);
+	    			self.appendChild(row);
+	    		})
+	    	}
+	    }
 	    
 	    
 	    
