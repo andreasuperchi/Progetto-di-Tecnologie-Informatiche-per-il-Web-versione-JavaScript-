@@ -17,15 +17,9 @@ import it.polimi.tiw_exam_js.beans.Riunione;
 import it.polimi.tiw_exam_js.beans.Utente;
 
 public class UtenteDAO {
-	private int id;
 	private Connection connection;
 	
 	public UtenteDAO(Connection connection) {
-		this.connection = connection;
-	}
-	
-	public UtenteDAO(int id, Connection connection) {
-		this.id = id;
 		this.connection = connection;
 	}
 	
@@ -101,7 +95,7 @@ public class UtenteDAO {
 		}
 	}
 	
-	public List<Riunione> trovaMieRiunioni() throws SQLException {
+	public List<Riunione> trovaMieRiunioni(int idUtente) throws SQLException {
 		
 		List<Riunione> mieRiunioni = new ArrayList<Riunione>();
 		String query = "SELECT * FROM riunione WHERE host = ? AND (? < data_fine OR (? = data_fine AND ? < ora_fine))";
@@ -113,7 +107,7 @@ public class UtenteDAO {
 		String[] date_time = formatted.split("@");
 		
 		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
-			pstatement.setInt(1, this.id);
+			pstatement.setInt(1, idUtente);
 			pstatement.setString(2, date_time[0]);
 			pstatement.setString(3, date_time[0]);
 			pstatement.setString(4, date_time[1]);
@@ -138,7 +132,7 @@ public class UtenteDAO {
 		return mieRiunioni;
 	}
 	
-	public List<Riunione> trovaRiunioniACuiSonoStatoInvitato() throws SQLException {
+	public List<Riunione> trovaRiunioniACuiSonoStatoInvitato(int idUtente) throws SQLException {
 		
 		List<Riunione> invitoRiunioni = new ArrayList<Riunione>();
 		String query = "SELECT R.id, R.titolo, R.data, R.ora, R.durata, R.num_max_partecipanti, R.host FROM partecipanti AS P JOIN riunione AS R ON P.id_riunione = R.id WHERE P.id_partecipante = ? AND (? < R.data_fine OR (? = R.data_fine AND ? < R.ora_fine))";
@@ -150,7 +144,7 @@ public class UtenteDAO {
 		String[] date_time = formatted.split("@");
 		
 		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
-			pstatement.setInt(1, this.id);
+			pstatement.setInt(1, idUtente);
 			pstatement.setString(2, date_time[0]);
 			pstatement.setString(3, date_time[0]);
 			pstatement.setString(4, date_time[1]);
@@ -175,12 +169,12 @@ public class UtenteDAO {
 		return invitoRiunioni;
 	}
 	
-	public List<Utente> trovaPersoneDaInvitare() throws SQLException {
+	public List<Utente> trovaPersoneDaInvitare(int idUtente) throws SQLException {
 		List<Utente> daInvitare = new ArrayList<Utente>();
 		String query = "SELECT id, nome, cognome FROM utente WHERE id != ?";
 		
 		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
-			pstatement.setInt(1, this.id);
+			pstatement.setInt(1, idUtente);
 			
 			try(ResultSet result = pstatement.executeQuery();) {
 				while(result.next()) {
@@ -198,12 +192,12 @@ public class UtenteDAO {
 		return daInvitare;
 	}
 	
-	public int trovaIDRiunione() throws SQLException{
+	public int trovaIDRiunione(int idUtente) throws SQLException{
 		int id = 0;
 		String query = "SELECT id FROM riunione WHERE host = ? ORDER BY id DESC LIMIT 1";
 		
 		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
-			pstatement.setInt(1, this.id);
+			pstatement.setInt(1, idUtente);
 
 			try(ResultSet result = pstatement.executeQuery();) {
 				while(result.next()) {
