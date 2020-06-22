@@ -11,7 +11,7 @@
 	function ListaRiunioniInvitato (_alert, _listcontainer, _listcontainerbody){
 	    this.alert = _alert
 		this.listcontainer = _listcontainer;
-	    this.listcontainerbody = _listcontainerbod
+	    this.listcontainerbody = _listcontainerbody;
 		
 	    this.reset = function(){
 	    	this.listcontainer.style.visibility = "hidden";
