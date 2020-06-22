@@ -3,6 +3,7 @@
 	
 	window.addEventListener("load", () =>{
 		pageOrchestrator.start();
+		pageOrchestrator.refresh();
 	}, false);
 	
 	function ListaRiunioniInvitato (_alert, _listcontainer, _listcontainerbody){
@@ -15,7 +16,7 @@
 	    }
 	    
 	    this.show = function(next){								//Recupera la lista delle riunioni a cui è stato invitato l'utente
-	    	this.self = this;
+	    	var self = this;
 	    	asyncCall("GET",'GetRiunioniInvitato', null, 
 	    		function (request){
 	    			if(request.readyState == 4){
@@ -43,30 +44,31 @@
 	    		var self = this;
 	    		arrayRiunioni.forEach(function(riunione){
 	    			row = document.createElement("tr");
-	    			idCell = document.createEleemnt("td");
+	    			idCell = document.createElement("td");
 	    			idCell.textContent = riunione.id;
 	    			row.appendChild(idCell);
-	    			dataCell = document.createElementById("td");
+	    			dataCell = document.createElement("td");
 	    			dataCell.textContent = riunione.data;
 	    			row.appendChild(dataCell);
-	    			oraCell = document.createElementById("td");
+	    			oraCell = document.createElement("td");
 	    			oraCell.textContent = riunione.ora;
 	    			row.appendChild(oraCell);
-	    			durataCell = document.createElementById("td");
+	    			durataCell = document.createElement("td");
 	    			durataCell.textContent = riunione.durata;
 	    			row.appendChild(durataCell);
-	    			numCell = document.createElementById("td");
+	    			numCell = document.createElement("td");
 	    			numCell.textContent = riunione.num_max_partecipanti;
 	    			row.appendChild(numCell);
-	    			hostCell = document.createElementById("td");
+	    			hostCell = document.createElement("td");
 	    			hostCell.textContent = riunione.host;
-	    			row.appendChild(host);
-	    			self.appendChild(row);
+	    			row.appendChild(hostCell);
+	    			self.listcontainerbody.appendChild(row);
 	    		});
-	    	}
-	    	this.listcontainer.style.visibility = "visible";
-	    }  
+	    		this.listcontainer.style.visibility = "visible";
+	    	}  
+	    }
 	}
+
 	
 	
 	
@@ -76,6 +78,11 @@
 			listaRiunioniInvitato = new ListaRiunioniInvitato(alertContainer,
 					document.getElementById("id_riunioni_invitato"),
 					document.getElementById("id_riunioni_invitato_body"));
-			};
+		};
+		
+		this.refresh = function() {
+			listaRiunioniInvitato.reset();
+			listaRiunioniInvitato.show();
+		};
 	}
 })();
