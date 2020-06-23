@@ -50,10 +50,10 @@ public class CreaRiunione extends HttpServlet {
 		
 		
 		String titolo = StringEscapeUtils.escapeJava(request.getParameter("titolo"));
-//		String data = StringEscapeUtils.escapeJava(request.getParameter("data"));
-//		String ora = StringEscapeUtils.escapeJava(request.getParameter("ora"));
-//		String durata = StringEscapeUtils.escapeJava(request.getParameter("durata"));
-//		int num_max_partecipanti = Integer.parseInt(request.getParameter("numero_max_partecipanti"));
+		String data = StringEscapeUtils.escapeJava(request.getParameter("data"));
+		String ora = StringEscapeUtils.escapeJava(request.getParameter("ora"));
+		String durata = StringEscapeUtils.escapeJava(request.getParameter("durata"));
+		int num_max_partecipanti = Integer.parseInt(request.getParameter("numero_max_partecipanti"));
 //		
 //		riunione.setTitolo(titolo);
 //		riunione.setData(data);
@@ -62,7 +62,7 @@ public class CreaRiunione extends HttpServlet {
 //		riunione.setNum_max_partecipanti(num_max_partecipanti);
 //		riunione.setHost(utente.getId());
 		
-		System.out.println(titolo);
+		System.out.println(titolo + " " + data + " " + ora + " " + durata + " " + num_max_partecipanti);
 		
 		String[] listaInvitati = null;
 		List<Utente> daInvitare = null;

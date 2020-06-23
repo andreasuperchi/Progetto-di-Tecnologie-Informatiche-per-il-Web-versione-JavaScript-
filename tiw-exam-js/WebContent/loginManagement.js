@@ -2,7 +2,7 @@
 	document.getElementById("loginButton").addEventListener('click', (e) => {
 		var form = e.target.closest("form");
 		if (form.checkValidity()){
-			asyncCall("POST", 'CheckLogin', e.target.closest("form"),
+			asyncCall("POST", 'CheckLogin', new FormData(e.target.closest("form")),
 					function(request){
 						if(request.readyState == XMLHttpRequest.DONE){
 							var message = request.responseText;

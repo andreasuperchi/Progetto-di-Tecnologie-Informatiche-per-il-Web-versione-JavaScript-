@@ -285,9 +285,20 @@
 //								document.getElementById("demo").innerHTML = this.responseText;
 //							}
 //						};
+						var string = "titolo=" + document.forms["creation_form"]["titolo"].value + "&data=" + document.forms["creation_form"]["data"].value
+						+ "&ora=" + document.forms["creation_form"]["ora"].value + "&durata=" + document.forms["creation_form"]["durata"].value + 
+						"&numero_max_partecipanti=" + document.forms["creation_form"]["numero_max_partecipanti"].value;
+						
+						string += "&id_invitati=";
+						
+						listaID.forEach(function(ID) {
+							string += ID;
+						})
+						
 						xhttp.open("POST", "CreaRiunione", true);
-						xhhtp.setRequestHeader("titolo", document.forms["creation_form"]["titolo"].value);
-						xhttp.send();
+						xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+						//xhhtp.setRequestHeader("titolo", document.forms["creation_form"]["titolo"].value);
+						xhttp.send(string);
 						
 					}
 				};

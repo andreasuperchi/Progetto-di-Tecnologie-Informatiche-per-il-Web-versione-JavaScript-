@@ -7,7 +7,7 @@ function asyncCall(method, url, formElement, cback, reset = true) {
 	    if (formElement == null) {
 	      request.send();
 	    } else {
-	      request.send(new FormData(formElement));
+	      request.send(formElement);
 	    }
 	    if (formElement !== null && reset === true) {
 	      formElement.reset();
