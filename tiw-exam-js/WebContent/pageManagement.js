@@ -216,7 +216,6 @@
     			self.listcontainerbody.appendChild(row);
 				
 				listaInvitati.forEach(function(invitato) {
-					var i = 0;
 					row = document.createElement("tr");
 					
 					idCell = document.createElement("td");
@@ -233,13 +232,11 @@
 	    			
 	    			checkBox = document.createElement("input");
 	    			checkBox.type = 'checkbox';
-	    		    checkBox.id = i;
-	    		    checkBox.value = 0;
+	    		    checkBox.id = invitato.id;
 	    			row.appendChild(checkBox);
 	    			
 	    			self.listcontainerbody.appendChild(row);
 	    			
-	    			i++;
 				});
 				
 				var q = row, button;
@@ -258,6 +255,29 @@
 	    	this.listcontainer.style.visibility = "visible";
 		}
 	};
+	
+	
+	
+	function CreaRiunione(_alert, listaUtenti){
+		this.alert = _alert;
+		var i = 1;
+		var temp;
+		var listaInvitati;
+		
+		document.getElementById("Invita").addEventListener('click', (e) =>{
+			for (i=1; i<=listaUtenti.lenght; i++){
+				temp = document.getElementById(i);
+				if(temp.checked == true){
+					listaInvitati.add(i);
+				}
+			}
+		});
+		
+		
+		
+	}
+	
+	
 	
 	function PageOrchestrator(){
 		var alertContainer = document.getElementById("id_alert");
