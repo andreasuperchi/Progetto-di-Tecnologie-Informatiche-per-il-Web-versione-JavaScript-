@@ -84,7 +84,7 @@
 	    
 	    this.show = function(next){								//Recupera la lista delle riunioni a cui è stato invitato l'utente
 	    	var self = this;
-	    	asyncCall("GET",'GetRiunioniIndette', null, 
+	    	asyncCall("GET",'GetRiunioniIndette', null,
 	    		function (request){
 	    			if(request.readyState == 4){
 	    				var message = request.responseText;
@@ -142,11 +142,10 @@
 		this.listcontainer = _listcontainer;
 	    this.listcontainerbody = _listcontainerbody;
 	    var datiRiunione;
-	    var listaID;
+	    var listaID = new Array();
 		
 		document.getElementById("creariunione").addEventListener('click', (e) => {
-			var form = e.target.closest("form");
-			datiRiunione = form;
+			var form = document.forms["creation_form"];
 			var modal = document.getElementById("modal");
 			var modalBottom = document.getElementById("modal-bottom");
 			
@@ -173,7 +172,7 @@
 			
 		this.show = function(next){								//Recupera la lista delle riunioni a cui è stato invitato l'utente
 	    	var self = this;
-	    	asyncCall("GET",'GetInvitati', null, 
+	    	asyncCall("GET",'GetInvitati', null,
 	    		function (request){
 	    			if(request.readyState == 4){
 	    				var message = request.responseText;
@@ -197,7 +196,7 @@
 				alert.textContent = "Non ci sono persone da invitare.";
 			} else {
 				var self = this;
-				
+		
 				row = document.createElement("tr");
 				
 				idCell = document.createElement("td");
@@ -219,6 +218,7 @@
     			self.listcontainerbody.appendChild(row);
 				
 				listaInvitati.forEach(function(invitato) {
+					
 					row = document.createElement("tr");
 					
 					idCell = document.createElement("td");
@@ -236,13 +236,16 @@
 	    			checkBox = document.createElement("input");
 	    			checkBox.type = 'checkbox';
 	    		    checkBox.id = invitato.id;
-	    		    checkBox.onclick = function(){
-	    		    	if(checkBox.checked){
-	    		    		listaID.splice(listaID.indexOf(checkBox.id),1);
-	    		    	}else{
-	    		    		listaID.push(checkBox.id);
-	    		    	}
-	    		    }
+	    		    checkBox.onclick = function() {
+	    		    	cb = document.getElementById(invitato.id);
+	    				if (cb.checked == true) {
+	    					listaID.push(cb.id);
+	    				} else {
+	    					var index = listaID.indexOf(cb.id);
+	    					listaID.splice(index, 1);
+	    				}
+	    				console.log(listaID);
+	    			};
 	    			row.appendChild(checkBox);
 	    			
 	    			self.listcontainerbody.appendChild(row);
@@ -257,7 +260,37 @@
 				button.type = 'button';
 				button.id = -1;
 				button.value = "Invita";
-				button.onclick = CreaRiunione(_alert, listaID, datiRiunione);
+				button.onclick = function() {
+					if (listaID.length > document.forms["creation_form"]["numero_max_partecipanti"].value) {
+						alert.textContent = "Numero massimo di persone superato!";
+					} else {
+//						asyncCall("POST",'CreaRiunione', document.forms["creation_form"] + listaID,
+//					    		function (request){
+//					    			if(request.readyState == 4){
+//					    				var message = request.responseText;
+//					    				if(request.status == 200){
+//					    					self.update(JSON.parse(request.responseText));
+//					    					if(next){
+//					    						next();
+//					    					}
+//					    				}else{
+//				    						self.alert.textContent = message;
+//				    					}
+//					    			}
+//					    		}
+//					    );
+						var xhttp = new XMLHttpRequest();
+//						xhttp.onreadystatechange = function() {
+//							if (this.readyState == 4 && this.status == 200) {
+//								document.getElementById("demo").innerHTML = this.responseText;
+//							}
+//						};
+						xhttp.open("POST", "CreaRiunione", true);
+						xhhtp.setRequestHeader("titolo", document.forms["creation_form"]["titolo"].value);
+						xhttp.send();
+						
+					}
+				};
 				
 				row.appendChild(button);
 				
@@ -266,20 +299,6 @@
 	    	this.listcontainer.style.visibility = "visible";
 		}
 	};
-	
-	
-	
-	function CreaRiunione(_alert, listaUtenti, datiRiunione){
-		this.alert = _alert;
-		var listainvitati;
-		
-		console.log(listaUtenti);
-		
-		
-		
-	}
-	
-	
 	
 	function PageOrchestrator(){
 		var alertContainer = document.getElementById("id_alert");
