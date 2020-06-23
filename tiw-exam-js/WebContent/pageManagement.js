@@ -142,6 +142,7 @@
 		this.listcontainer = _listcontainer;
 	    this.listcontainerbody = _listcontainerbody;
 	    var datiRiunione;
+	    var listaID;
 		
 		document.getElementById("creariunione").addEventListener('click', (e) => {
 			var form = e.target.closest("form");
@@ -235,6 +236,13 @@
 	    			checkBox = document.createElement("input");
 	    			checkBox.type = 'checkbox';
 	    		    checkBox.id = invitato.id;
+	    		    checkBox.onclick = function(){
+	    		    	if(checkBox.checked){
+	    		    		listaID.splice(listaID.indexOf(checkBox.id),1);
+	    		    	}else{
+	    		    		listaID.push(checkBox.id);
+	    		    	}
+	    		    }
 	    			row.appendChild(checkBox);
 	    			
 	    			self.listcontainerbody.appendChild(row);
@@ -249,7 +257,7 @@
 				button.type = 'button';
 				button.id = -1;
 				button.value = "Invita";
-				button.onclick = CreaRiunione(_alert, listaInvitati, datiRiunione);
+				button.onclick = CreaRiunione(_alert, listaID, datiRiunione);
 				
 				row.appendChild(button);
 				
@@ -265,13 +273,8 @@
 		this.alert = _alert;
 		var listainvitati;
 		
+		console.log(listaUtenti);
 		
-		listaUtenti.forEach(function(invitato){
-			if(document.getElementById(invitato.id).checked){
-				listaInvitati.add(invitato.id);
-				console.log(invitato.id);
-			}
-		})
 		
 		
 	}
