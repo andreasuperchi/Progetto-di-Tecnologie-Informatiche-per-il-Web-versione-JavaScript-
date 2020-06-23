@@ -141,9 +141,11 @@
 		this.alert = _alert
 		this.listcontainer = _listcontainer;
 	    this.listcontainerbody = _listcontainerbody;
+	    var datiRiunione;
 		
 		document.getElementById("creariunione").addEventListener('click', (e) => {
 			var form = e.target.closest("form");
+			datiRiunione = form;
 			var modal = document.getElementById("modal");
 			var modalBottom = document.getElementById("modal-bottom");
 			
@@ -247,6 +249,7 @@
 				button.type = 'button';
 				button.id = -1;
 				button.value = "Invita";
+				button.onclick = CreaRiunione(_alert, listaInvitati, datiRiunione);
 				
 				row.appendChild(button);
 				
@@ -258,21 +261,17 @@
 	
 	
 	
-	function CreaRiunione(_alert, listaUtenti){
+	function CreaRiunione(_alert, listaUtenti, datiRiunione){
 		this.alert = _alert;
-		var i = 1;
-		var temp;
-		var listaInvitati;
+		var listainvitati;
 		
-		document.getElementById("Invita").addEventListener('click', (e) =>{
-			for (i=1; i<=listaUtenti.lenght; i++){
-				temp = document.getElementById(i);
-				if(temp.checked == true){
-					listaInvitati.add(i);
-				}
+		
+		listaUtenti.forEach(function(invitato){
+			if(document.getElementById(invitato.id).checked){
+				listaInvitati.add(invitato.id);
+				console.log(invitato.id);
 			}
-		});
-		
+		})
 		
 		
 	}
@@ -296,6 +295,9 @@
 					alertContainer,
 					document.getElementById("modal"),
 					document.getElementById("modal-content"));
+			
+			
+			
 		};
 		
 		this.refresh = function() {
