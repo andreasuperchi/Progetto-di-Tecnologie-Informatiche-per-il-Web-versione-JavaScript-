@@ -137,12 +137,127 @@
 	    }
 	}
 	
-	function CreaRiunione(){
+	function ListaInviti(_alert, _listcontainer, _listcontainerbody) {
+		this.alert = _alert
+		this.listcontainer = _listcontainer;
+	    this.listcontainerbody = _listcontainerbody;
 		
-	}
-
-	
-	
+		document.getElementById("creariunione").addEventListener('click', (e) => {
+			var form = e.target.closest("form");
+			var modal = document.getElementById("modal");
+			var modalBottom = document.getElementById("modal-bottom");
+			
+			if(form.checkValidity()) {
+				modal.style.display = "block";
+				
+				(function() {
+					document.getElementById("close").addEventListener('click', (e) => {
+						modal.style.display = "none";
+					});
+				})();
+				
+				window.onclick = function(event) {
+					if (event.target == modal) {
+						modal.style.display = "none";
+					}
+				}
+			}
+		});
+			
+		this.reset = function(){
+		    	this.listcontainer.style.visibility = "hidden";
+		}
+			
+		this.show = function(next){								//Recupera la lista delle riunioni a cui è stato invitato l'utente
+	    	var self = this;
+	    	asyncCall("GET",'GetInvitati', null, 
+	    		function (request){
+	    			if(request.readyState == 4){
+	    				var message = request.responseText;
+	    				if(request.status == 200){
+	    					self.update(JSON.parse(request.responseText));
+	    					if(next){
+	    						next();
+	    					}
+	    				}else{
+    						self.alert.textContent = message;
+    					}
+	    			}
+	    		}
+	    	);
+	    };
+			
+		this.update = function(listaInvitati) {
+			var l = listaInvitati.length,
+				row, idCell, nomeCell, cognomeCell, checkBox;
+			if (l == 0) {
+				alert.textContent = "Non ci sono persone da invitare.";
+			} else {
+				var self = this;
+				
+				row = document.createElement("tr");
+				
+				idCell = document.createElement("td");
+    			idCell.textContent = "ID";
+    			row.appendChild(idCell);
+    			
+    			nomeCell = document.createElement("td");
+    			nomeCell.textContent = "Nome";
+    			row.appendChild(nomeCell);
+    			
+    			cognomeCell = document.createElement("td");
+    			cognomeCell.textContent = "Cognome";
+    			row.appendChild(cognomeCell);
+    			
+    			checkBox = document.createElement("td");
+    			checkBox.textContent = "Da Invitare";
+    			row.appendChild(checkBox);
+    			
+    			self.listcontainerbody.appendChild(row);
+				
+				listaInvitati.forEach(function(invitato) {
+					var i = 0;
+					row = document.createElement("tr");
+					
+					idCell = document.createElement("td");
+	    			idCell.textContent = invitato.id;
+	    			row.appendChild(idCell);
+	    			
+	    			nomeCell = document.createElement("td");
+	    			nomeCell.textContent = invitato.nome;
+	    			row.appendChild(nomeCell);
+	    			
+	    			cognomeCell = document.createElement("td");
+	    			cognomeCell.textContent = invitato.cognome;
+	    			row.appendChild(cognomeCell);
+	    			
+	    			checkBox = document.createElement("input");
+	    			checkBox.type = 'checkbox';
+	    		    checkBox.id = i;
+	    		    checkBox.value = 0;
+	    			row.appendChild(checkBox);
+	    			
+	    			self.listcontainerbody.appendChild(row);
+	    			
+	    			i++;
+				});
+				
+				var q = row, button;
+				
+				row = document.createElement("tr");
+				
+				button = document.createElement("input");
+				button.type = 'button';
+				button.id = -1;
+				button.value = "Invita";
+				
+				row.appendChild(button);
+				
+				self.listcontainerbody.appendChild(row);
+			}
+	    	this.listcontainer.style.visibility = "visible";
+		}
+	};
 	
 	function PageOrchestrator(){
 		var alertContainer = document.getElementById("id_alert");
@@ -156,6 +271,11 @@
 					alertContainer,
 					document.getElementById("id_riunioni_indette"),
 					document.getElementById("id_riunioni_indette_body"));
+			
+			listaInviti = new ListaInviti(
+					alertContainer,
+					document.getElementById("modal"),
+					document.getElementById("modal-content"));
 		};
 		
 		this.refresh = function() {
@@ -164,6 +284,9 @@
 			
 			listaRiunioniIndette.reset();
 			listaRiunioniIndette.show();
+			
+			listaInviti.reset();
+			listaInviti.show();
 		};
 	}
 })();

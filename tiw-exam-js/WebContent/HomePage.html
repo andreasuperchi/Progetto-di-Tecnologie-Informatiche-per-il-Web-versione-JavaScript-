@@ -2,6 +2,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
+<link rel="stylesheet" type="text/css" media="all" href="CSS/myStyle.css" />
 <title>Pagina Home</title>
 <script src="utils.js" charset="utf-8" defer></script>
 <script src="pageManagement.js" charset="utf-8" defer></script>
@@ -10,13 +11,18 @@
 	<div align="right">
 			<a href="/Logout">Logout</a>
 	</div>
-	<h1>Queste sono le riunioni a cui sei stato invitato:</h1>
+	<h1 align="center">Benvenuto nella pagina di gestione delle riunioni!</h1>
 	<div id="id_alert" class="alertmessage"></div>
-	<table>
+	<table cellspacing="60" align="center">
 		<tr>
 			<td>
 				<table id="id_riunioni_invitato">
 					<thead>
+						<tr>
+							<td colspan="7">
+								<h2>Queste sono le riunioni a cui sei stato invitato:</h2>
+							</td>
+						</tr>
 						<tr>
 							<th>ID</th>
 							<th>Titolo</th>
@@ -32,8 +38,13 @@
 				</table>
 			</td>
 			<td>
-				<table id="id_riunioni_indette" cellspacing="50">
+				<table id="id_riunioni_indette">
 					<thead>
+						<tr>
+							<td colspan="7">
+								<h2>Queste sono le riunioni da te indette:</h2>
+							</td>
+						</tr>
 						<tr>
 							<th>ID</th>
 							<th>Titolo</th>
@@ -47,15 +58,26 @@
 					</tbody>
 				</table>
 			</td>
+		</tr>
+		<tr>
+			<td>
+				<h1>Crea una nuova riunione</h1>
+				<form action="#">
+					Titolo: <input type="text" name="titolo" required> <br>
+					Data: <input type="date" name ="data" required> <br> 
+					Ora: <input type="time" name = "ora" required><br>
+					Durata: <input type="time" name= "durata" required><br>
+					Numero Max Partecipanti: <input type="number" name="numero_max_partecipanti" required><br>
+					<input id="creariunione" type="button" value="Crea Riunione">
+				</form>
+				<div id="modal" class="modal">
+					<div id="modal-content" class="modal-content">
+						<span id="close" class="close">&times;</span>
+					</div>
+					<div id="modal-bottom" class="modal-bottom" align="center"></div>
+				</div>
+			</td>
+		</tr>
 	</table>
-	<h1>Crea una nuova riunione</h1>
-	<form th:action="#">
-		Titolo: <input type="text" name="titolo" required> <br>
-		Data: <input type="date" name ="data" required> <br> 
-		Ora: <input type="time" name = "ora" required><br>
-		Durata: <input type="time" name= "durata" required><br>
-		Numero Max Partecipanti: <input type="number" name="numero_max_partecipanti" required><br>
-			<input type="submit" value="Crea Riunione">
-	</form>
 </body>
 </html>
