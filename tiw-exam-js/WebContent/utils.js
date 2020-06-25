@@ -10,6 +10,7 @@ function asyncCall(method, url, formElement, cback, reset = true) {
 	      request.send(formElement);
 	    }
 	    if (formElement !== null && reset === true) {
-	      formElement.reset();
+	      formElement.delete("username");
+	      formElement.delete("password");
 	    }
 };

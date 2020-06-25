@@ -19,10 +19,8 @@
   width: 30%;
 }
 
-.modal-footer {
-  padding: 2px 16px;
-  background-color: #5cb85c;
-  color: white;
+.modal-bottom {
+  margin: auto;
 }
 
 .close {
@@ -37,4 +35,10 @@
   color: black;
   text-decoration: none;
   cursor: pointer;
+}
+
+.alert-modale{
+	color: red;
+	font-weight: bold;
+	margin: auto;
 }

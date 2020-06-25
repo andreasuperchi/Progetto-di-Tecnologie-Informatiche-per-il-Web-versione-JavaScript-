@@ -138,7 +138,7 @@
 	}
 	
 	function ListaInviti(_alert, _listcontainer, _listcontainerbody) {
-		this.alert = _alert
+		this.alert = _alert;
 		this.listcontainer = _listcontainer;
 	    this.listcontainerbody = _listcontainerbody;
 	    var datiRiunione;
@@ -261,45 +261,35 @@
 				button.id = -1;
 				button.value = "Invita";
 				button.onclick = function() {
-					if (listaID.length > document.forms["creation_form"]["numero_max_partecipanti"].value) {
-						alert.textContent = "Numero massimo di persone superato!";
+//					if (listaID.length > document.forms["creation_form"]["numero_max_partecipanti"].value) {
+//						alert.textContent = "Numero massimo di persone superato!";
+					if (0 == 1) {
+						console.log("fra gay");
 					} else {
-//						asyncCall("POST",'CreaRiunione', document.forms["creation_form"] + listaID,
-//					    		function (request){
-//					    			if(request.readyState == 4){
-//					    				var message = request.responseText;
-//					    				if(request.status == 200){
-//					    					self.update(JSON.parse(request.responseText));
-//					    					if(next){
-//					    						next();
-//					    					}
-//					    				}else{
-//				    						self.alert.textContent = message;
-//				    					}
-//					    			}
-//					    		}
-//					    );
-						var xhttp = new XMLHttpRequest();
-//						xhttp.onreadystatechange = function() {
-//							if (this.readyState == 4 && this.status == 200) {
-//								document.getElementById("demo").innerHTML = this.responseText;
-//							}
-//						};
-						var string = "titolo=" + document.forms["creation_form"]["titolo"].value + "&data=" + document.forms["creation_form"]["data"].value
-						+ "&ora=" + document.forms["creation_form"]["ora"].value + "&durata=" + document.forms["creation_form"]["durata"].value + 
-						"&numero_max_partecipanti=" + document.forms["creation_form"]["numero_max_partecipanti"].value;
+						var finalForm = new FormData();
 						
-						string += "&id_invitati=";
+						finalForm.append("titolo", document.forms["creation_form"]["titolo"].value);
+						finalForm.append("data", document.forms["creation_form"]["data"].value);
+						finalForm.append("ora", document.forms["creation_form"]["ora"].value);
+						finalForm.append("durata", document.forms["creation_form"]["durata"].value);
+						finalForm.append("num_max_partecipanti", document.forms["creation_form"]["numero_max_partecipanti"].value);
+						finalForm.append("listaInvitati", listaID);
 						
-						listaID.forEach(function(ID) {
-							string += ID;
-						})
-						
-						xhttp.open("POST", "CreaRiunione", true);
-						xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-						//xhhtp.setRequestHeader("titolo", document.forms["creation_form"]["titolo"].value);
-						xhttp.send(string);
-						
+						asyncCall("POST",'CreaRiunione', finalForm,
+					    		function (request){
+					    			if(request.readyState == 4){
+					    				var message = request.responseText;
+					    				if(request.status == 200){
+					    					self.update(JSON.parse(request.responseText));
+					    					if(next){
+					    						next();
+					    					}
+					    				}else{
+				    						self.alert.textContent = message;
+				    					}
+					    			}
+					    		}
+					    );					
 					}
 				};
 				
@@ -313,6 +303,8 @@
 	
 	function PageOrchestrator(){
 		var alertContainer = document.getElementById("id_alert");
+		var alertModale = document.getElementById("alert_modale");
+		
 		this.start = function(){
 			listaRiunioniInvitato = new ListaRiunioniInvitato(
 					alertContainer,
@@ -325,7 +317,7 @@
 					document.getElementById("id_riunioni_indette_body"));
 			
 			listaInviti = new ListaInviti(
-					alertContainer,
+					alertModale,
 					document.getElementById("modal"),
 					document.getElementById("modal-content"));
 			

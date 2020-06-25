@@ -3,6 +3,7 @@ package it.polimi.tiw_exam_js.controllers;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -13,6 +14,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringEscapeUtils;
+import org.w3c.dom.html.HTMLCollection;
+import org.w3c.dom.html.HTMLElement;
+import org.w3c.dom.html.HTMLFormElement;
 
 import com.google.gson.Gson;
 
@@ -46,40 +50,41 @@ public class CreaRiunione extends HttpServlet {
 		
 		UtenteDAO utenteDAO = new UtenteDAO(connection);
 		
-		//int num_tentativi = Integer.parseInt(request.getParameter("num_tentativi"));
+		String titolo = request.getParameter("titolo");
+		String data = request.getParameter("data");
+		String ora = request.getParameter("ora");
+		String durata = request.getParameter("durata");
+		int num_max_partecipanti = Integer.parseInt(request.getParameter("num_max_partecipanti"));
 		
+		riunione.setTitolo(titolo);
+		riunione.setData(data);
+		riunione.setOra(ora);
+		riunione.setDurata(durata);
+		riunione.setNum_max_partecipanti(num_max_partecipanti);
+		riunione.setHost(utente.getId());
+				
+		String listaInvitatiString = request.getParameter("listaInvitati");
+		String[] listaInvitati = listaInvitatiString.split(",");
+		List<Integer> listaInvitatiFinal = new ArrayList<Integer>();
 		
-		String titolo = StringEscapeUtils.escapeJava(request.getParameter("titolo"));
-		String data = StringEscapeUtils.escapeJava(request.getParameter("data"));
-		String ora = StringEscapeUtils.escapeJava(request.getParameter("ora"));
-		String durata = StringEscapeUtils.escapeJava(request.getParameter("durata"));
-		int num_max_partecipanti = Integer.parseInt(request.getParameter("numero_max_partecipanti"));
-//		
-//		riunione.setTitolo(titolo);
-//		riunione.setData(data);
-//		riunione.setOra(ora);
-//		riunione.setDurata(durata);
-//		riunione.setNum_max_partecipanti(num_max_partecipanti);
-//		riunione.setHost(utente.getId());
+		for(int i = 0; i < listaInvitati.length; i++) {
+			int temp = Integer.parseInt(listaInvitati[i]);
+			listaInvitatiFinal.add(temp);
+		}
 		
-		System.out.println(titolo + " " + data + " " + ora + " " + durata + " " + num_max_partecipanti);
-		
-		String[] listaInvitati = null;
-		List<Utente> daInvitare = null;
-		
-		//System.out.println(num_max_partecipanti);
-		
-		//listaInvitati = request.getParameterValues("list");
-		
-//		if(listaInvitati.size() > num_max_partecipanti) {
-//			num_tentativi++;
-//			
-//			String path;
-//			ServletContext servletContext = getServletContext();
-//			final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
-//			
-//			if(num_tentativi == 3) {
-//				path = "/WEB-INF/Errore.html";
+		if(listaInvitatiFinal.size() > num_max_partecipanti) {
+			utente.setNumeroTentativi(utente.getNumeroTentativi() + 1);
+			
+			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+			
+			if(utente.getNumeroTentativi() == 3) {
+				response.getWriter().println("Numero massimo di tentativi raggiunto!");
+			} else {
+				response.getWriter().println("Troppi invitati selezionati! Riprova.");
+			}
+			
+			return;
+		}
 //			} else {
 //				path = "/WEB-INF/Anagrafica.html";
 //				
@@ -105,6 +110,7 @@ public class CreaRiunione extends HttpServlet {
 //			
 //			response.sendRedirect(path);
 //		}
+	//}
 	}
 
 	public void destroy() {

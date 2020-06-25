@@ -10,7 +10,7 @@ public class Utente {
 	private String nome;
 	private String cognome;
 	private Date data;
-	
+	private int numeroTentativi = 0;
 	
 	
 	public int getId() {
@@ -55,5 +55,10 @@ public class Utente {
 	public void setData(Date data) {
 		this.data = data;
 	}
-	
+	public int getNumeroTentativi() {
+		return numeroTentativi;
+	}
+	public void setNumeroTentativi(int numeroTentativi) {
+		this.numeroTentativi = numeroTentativi;
+	}
 }
