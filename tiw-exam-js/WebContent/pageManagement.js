@@ -244,7 +244,6 @@
 	    					var index = listaID.indexOf(cb.id);
 	    					listaID.splice(index, 1);
 	    				}
-	    				console.log(listaID);
 	    			};
 	    			row.appendChild(checkBox);
 	    			
@@ -285,6 +284,11 @@
 					    						next();
 					    					}
 					    				}else{
+					    					var errore = "Numero massimo di tentativi raggiunto!";
+					    					if (message.localeCompare(errore) == 0) {
+					    						console.log("sono qui");
+					    						this.listcontainerbody.style.visibility = "hidden";
+					    					}
 				    						self.alert.textContent = message;
 				    					}
 					    			}
@@ -319,7 +323,7 @@
 			listaInviti = new ListaInviti(
 					alertModale,
 					document.getElementById("modal"),
-					document.getElementById("modal-content"));
+					document.getElementById("modal-box"));
 			
 			
 			
