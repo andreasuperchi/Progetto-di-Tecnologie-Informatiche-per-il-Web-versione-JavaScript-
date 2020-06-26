@@ -13,13 +13,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringEscapeUtils;
-import org.w3c.dom.html.HTMLCollection;
-import org.w3c.dom.html.HTMLElement;
-import org.w3c.dom.html.HTMLFormElement;
-
-import com.google.gson.Gson;
-
 import it.polimi.tiw_exam_js.DAO.RiunioneDAO;
 import it.polimi.tiw_exam_js.DAO.UtenteDAO;
 import it.polimi.tiw_exam_js.beans.Utente;
@@ -71,7 +64,7 @@ public class CreaRiunione extends HttpServlet {
 				response.getWriter().println("Numero massimo di tentativi raggiunto! Prova a creare una nuova riunione.");
 				response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 			} else {
-				response.getWriter().println("Troppi invitati selezionati! Riprova.");
+				response.getWriter().println("Troppi invitati selezionati! Rimuovi " + (listaInvitatiFinal.size() - num_max_partecipanti) + " partecipanti.");
 				response.setStatus(HttpServletResponse.SC_BAD_GATEWAY);
 			}
 			

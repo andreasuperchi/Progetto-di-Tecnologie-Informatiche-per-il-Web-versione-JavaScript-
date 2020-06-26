@@ -1,5 +1,6 @@
 (function(){
 	var riunioniInvitato, riunioneIndette, wizard, pageOrchestrator = new PageOrchestrator();
+	 var numeroTentativi = 0;
 	
 	window.addEventListener("load", () =>{
 		pageOrchestrator.start();
@@ -141,7 +142,6 @@
 		this.alert = _alert;
 		this.listcontainer = _listcontainer;
 	    this.listcontainerbody = _listcontainerbody;
-	    var datiRiunione;
 	    var listaID = new Array();
 		
 		document.getElementById("creariunione").addEventListener('click', (e) => {
@@ -152,18 +152,18 @@
 			if(form.checkValidity()) {
 				modal.style.display = "block";
 				
-				(function() {
-					document.getElementById("close").addEventListener('click', (e) => {
-						modal.style.display = "none";
-					});
-				})();
+				document.getElementById("close").addEventListener('click', (e) => {
+					modal.style.display = "none";
+				});
 				
 				window.onclick = function(event) {
 					if (event.target == modal) {
 						modal.style.display = "none";
 					}
 				}
+				
 			}
+			pageOrchestrator.refresh();
 		});
 			
 		this.show = function(next){								//Recupera la lista delle riunioni a cui è stato invitato l'utente
@@ -191,7 +191,10 @@
 			if (l == 0) {
 				alert.textContent = "Non ci sono persone da invitare.";
 			} else {
+				this.listcontainerbody.innerHTML = "";
 				var self = this;
+				document.getElementById("modal-inner").style.visibility = "visible";
+				document.getElementById("modal-bottom").style.visibility = "visible";
 		
 				row = document.createElement("tr");
 				
@@ -256,8 +259,18 @@
 				button.id = -1;
 				button.value = "Invita";
 				button.onclick = function() {
-					if (listaID.length > document.forms["creation_form"]["numero_max_partecipanti"].value) {
-						alert.textContent = "Numero massimo di persone superato!";
+					var diff = listaID.length - document.forms["creation_form"]["numero_max_partecipanti"].value
+//					if (listaID.length > document.forms["creation_form"]["numero_max_partecipanti"].value) {
+//						self.alert.textContent = "Numero massimo di persone superato! Rimuovi " + diff + " partecipanti.";
+//						numeroTentativi++;
+//						if (numeroTentativi == 3) {
+//							document.getElementById("modal-inner").style.visibility = "hidden";
+//    						document.getElementById("modal-bottom").style.visibility = "hidden";
+//    						self.alert.textContent = "Numero massimo di tentativi raggiunto! Prova a creare una nuova riunione.";
+//						}
+					if (0 == 1) {
+						
+						console.log("ciao");
 					} else {
 						var finalForm = new FormData();
 						
@@ -273,7 +286,7 @@
 					    			if(request.readyState == 4){
 					    				var message = request.responseText;
 					    				if(request.status == 200){
-					    					pageOrchestrator.reset();
+					    					pageOrchestrator.refresh();
 					    					modal.style.display = "none";
 					    				}else{
 					    					if (request.status == 403) {
@@ -293,11 +306,14 @@
 				self.listcontainerbody.appendChild(row);
 			}
 	    	this.listcontainer.style.visibility = "visible";
+	    	
 		};
 		
 		this.reset = function(){
-			
 	    	this.listcontainer.style.visibility = "hidden";
+	    	document.getElementById("alert_modale").innerHTML = "";
+	    	numeroTentativi = 0;
+	    	listaID = new Array();
 	    	listaID.forEach(function(id) {
 	    		document.getElementById(id).checked == false;
 	    	});
@@ -310,6 +326,9 @@
 		var alertModale = document.getElementById("alert_modale");
 		
 		this.start = function(){
+			var data = document.getElementById("id_data");
+			data.min = new Date().toISOString().split("T")[0];
+			
 			listaRiunioniInvitato = new ListaRiunioniInvitato(
 					alertContainer,
 					document.getElementById("id_riunioni_invitato"),
@@ -324,9 +343,6 @@
 					alertModale,
 					document.getElementById("modal"),
 					document.getElementById("modal-inner"));
-			
-			
-			
 		};
 		
 		this.refresh = function() {
@@ -339,13 +355,5 @@
 			listaInviti.reset();
 			listaInviti.show();
 		};
-		
-		this.reset = function() {
-			listaRiunioniIndette.reset();
-			listaRiunioniIndette.show();
-			
-			listaInviti.reset();
-			listaInviti.show();
-		}
 	}
 })();
