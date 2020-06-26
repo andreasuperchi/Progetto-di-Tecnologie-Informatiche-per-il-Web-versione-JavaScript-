@@ -166,10 +166,6 @@
 			}
 		});
 			
-		this.reset = function(){
-		    	this.listcontainer.style.visibility = "hidden";
-		}
-			
 		this.show = function(next){								//Recupera la lista delle riunioni a cui è stato invitato l'utente
 	    	var self = this;
 	    	asyncCall("GET",'GetInvitati', null,
@@ -260,10 +256,8 @@
 				button.id = -1;
 				button.value = "Invita";
 				button.onclick = function() {
-//					if (listaID.length > document.forms["creation_form"]["numero_max_partecipanti"].value) {
-//						alert.textContent = "Numero massimo di persone superato!";
-					if (0 == 1) {
-						console.log("fra gay");
+					if (listaID.length > document.forms["creation_form"]["numero_max_partecipanti"].value) {
+						alert.textContent = "Numero massimo di persone superato!";
 					} else {
 						var finalForm = new FormData();
 						
@@ -279,15 +273,12 @@
 					    			if(request.readyState == 4){
 					    				var message = request.responseText;
 					    				if(request.status == 200){
-					    					self.update(JSON.parse(request.responseText));
-					    					if(next){
-					    						next();
-					    					}
+					    					pageOrchestrator.reset();
+					    					modal.style.display = "none";
 					    				}else{
-					    					var errore = "Numero massimo di tentativi raggiunto!";
-					    					if (message.localeCompare(errore) == 0) {
-					    						console.log("sono qui");
-					    						this.listcontainerbody.style.visibility = "hidden";
+					    					if (request.status == 403) {
+					    						document.getElementById("modal-inner").style.visibility = "hidden";
+					    						document.getElementById("modal-bottom").style.visibility = "hidden";
 					    					}
 				    						self.alert.textContent = message;
 				    					}
@@ -302,7 +293,16 @@
 				self.listcontainerbody.appendChild(row);
 			}
 	    	this.listcontainer.style.visibility = "visible";
-		}
+		};
+		
+		this.reset = function(){
+			
+	    	this.listcontainer.style.visibility = "hidden";
+	    	listaID.forEach(function(id) {
+	    		document.getElementById(id).checked == false;
+	    	});
+	    	listaID.splice(0, listaID.length);
+		};
 	};
 	
 	function PageOrchestrator(){
@@ -323,7 +323,7 @@
 			listaInviti = new ListaInviti(
 					alertModale,
 					document.getElementById("modal"),
-					document.getElementById("modal-box"));
+					document.getElementById("modal-inner"));
 			
 			
 			
@@ -339,5 +339,13 @@
 			listaInviti.reset();
 			listaInviti.show();
 		};
+		
+		this.reset = function() {
+			listaRiunioniIndette.reset();
+			listaRiunioniIndette.show();
+			
+			listaInviti.reset();
+			listaInviti.show();
+		}
 	}
 })();

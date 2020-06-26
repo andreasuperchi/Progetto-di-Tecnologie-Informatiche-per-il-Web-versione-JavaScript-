@@ -20,8 +20,8 @@ import org.w3c.dom.html.HTMLFormElement;
 
 import com.google.gson.Gson;
 
+import it.polimi.tiw_exam_js.DAO.RiunioneDAO;
 import it.polimi.tiw_exam_js.DAO.UtenteDAO;
-import it.polimi.tiw_exam_js.beans.Riunione;
 import it.polimi.tiw_exam_js.beans.Utente;
 import it.polimi.tiw_exam_js.utils.ConnectionHandler;
 
@@ -45,8 +45,7 @@ public class CreaRiunione extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Utente utente = (Utente) request.getSession().getAttribute("utente");
-		Riunione riunione = new Riunione();
-		int idRiunione;
+		int idRiunione = -1;
 		
 		UtenteDAO utenteDAO = new UtenteDAO(connection);
 		
@@ -55,13 +54,6 @@ public class CreaRiunione extends HttpServlet {
 		String ora = request.getParameter("ora");
 		String durata = request.getParameter("durata");
 		int num_max_partecipanti = Integer.parseInt(request.getParameter("num_max_partecipanti"));
-		
-		riunione.setTitolo(titolo);
-		riunione.setData(data);
-		riunione.setOra(ora);
-		riunione.setDurata(durata);
-		riunione.setNum_max_partecipanti(num_max_partecipanti);
-		riunione.setHost(utente.getId());
 				
 		String listaInvitatiString = request.getParameter("listaInvitati");
 		String[] listaInvitati = listaInvitatiString.split(",");
@@ -75,42 +67,34 @@ public class CreaRiunione extends HttpServlet {
 		if(listaInvitatiFinal.size() > num_max_partecipanti) {
 			utente.setNumeroTentativi(utente.getNumeroTentativi() + 1);
 			
-			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-			
 			if(utente.getNumeroTentativi() == 3) {
-				response.getWriter().println("Numero massimo di tentativi raggiunto!");
+				response.getWriter().println("Numero massimo di tentativi raggiunto! Prova a creare una nuova riunione.");
+				response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 			} else {
 				response.getWriter().println("Troppi invitati selezionati! Riprova.");
+				response.setStatus(HttpServletResponse.SC_BAD_GATEWAY);
 			}
 			
-			return;
+			return;	
+		} else {			
+			try {
+				utenteDAO.creaRiunione(titolo, data, ora, durata, num_max_partecipanti, utente.getId());
+				idRiunione = utenteDAO.trovaIDRiunione(utente.getId());
+				RiunioneDAO riunioneDAO = new RiunioneDAO(connection);
+				for(int i : listaInvitatiFinal) {
+					riunioneDAO.addPartecipante(idRiunione, i);
+				}
+			}
+			catch(SQLException e) {
+				response.getWriter().println("Errore nella creazione della riunione nel database.");
+				response.setStatus(HttpServletResponse.SC_BAD_GATEWAY);
+			}
+			
+			response.setStatus(HttpServletResponse.SC_OK);
+			response.setContentType("application/json");
+			response.setCharacterEncoding("UTF-8");
+			response.getWriter().print(idRiunione);
 		}
-//			} else {
-//				path = "/WEB-INF/Anagrafica.html";
-//				
-//			}
-//			
-//		} else {			
-//			try {
-//				utenteDAO.creaRiunione(titolo, data, ora, durata, num_max_partecipanti, host);
-//				idRiunione = utenteDAO.trovaIDRiunione();
-//				RiunioneDAO riunioneDAO = new RiunioneDAO(idRiunione, connection);
-//				for(int i : listaInvitati) {
-//					riunioneDAO.addPartecipante(i);
-//				}
-//			}
-//			catch(SQLException e) {
-//				response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Errore nella creazione della riunione");
-//			}
-//			
-//			String path = getServletContext().getContextPath();
-//			String target = "/GoToHomePage";
-//			
-//			path = path + target;
-//			
-//			response.sendRedirect(path);
-//		}
-	//}
 	}
 
 	public void destroy() {
