@@ -259,18 +259,19 @@
 				button.id = -1;
 				button.value = "Invita";
 				button.onclick = function() {
-					var diff = listaID.length - document.forms["creation_form"]["numero_max_partecipanti"].value
-//					if (listaID.length > document.forms["creation_form"]["numero_max_partecipanti"].value) {
-//						self.alert.textContent = "Numero massimo di persone superato! Rimuovi " + diff + " partecipanti.";
-//						numeroTentativi++;
-//						if (numeroTentativi == 3) {
-//							document.getElementById("modal-inner").style.visibility = "hidden";
-//    						document.getElementById("modal-bottom").style.visibility = "hidden";
-//    						self.alert.textContent = "Numero massimo di tentativi raggiunto! Prova a creare una nuova riunione.";
-//						}
-					if (0 == 1) {
-						
-						console.log("ciao");
+					var diff = listaID.length - document.forms["creation_form"]["numero_max_partecipanti"].value;
+					
+					if (document.forms["creation_form"]["numero_max_partecipanti"].value <= 0) {
+						self.alert.textContent = "Numero di partecipanti non valido!";
+					}
+					else if (listaID.length > document.forms["creation_form"]["numero_max_partecipanti"].value) {
+						self.alert.textContent = "Numero massimo di persone superato! Rimuovi " + diff + " partecipanti.";
+						numeroTentativi++;
+						if (numeroTentativi == 3) {
+							document.getElementById("modal-inner").style.visibility = "hidden";
+    						document.getElementById("modal-bottom").style.visibility = "hidden";
+    						self.alert.textContent = "Numero massimo di tentativi raggiunto! Prova a creare una nuova riunione.";
+						}
 					} else {
 						var finalForm = new FormData();
 						
@@ -287,6 +288,7 @@
 					    				var message = request.responseText;
 					    				if(request.status == 200){
 					    					pageOrchestrator.refresh();
+					    					document.forms["creation_form"].reset();
 					    					modal.style.display = "none";
 					    				}else{
 					    					if (request.status == 403) {

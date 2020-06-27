@@ -2,20 +2,41 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
+<link rel="stylesheet" type="text/css" media="all" href="CSS/loginStyle.css" />
 <title>Pagina di Benvenuto</title>
 <script src="utils.js" charset="utf-8" defer></script>
 <script src="loginManagement.js" charset="utf-8" defer></script>
 </head>
 <body>
-	<h1>Benvenuto al sito per la gestione delle riunioni!</h1>
-	<h2>Completa il form per effettuare il login</h2>
-	<form action="#">
-		<fieldset>
-			Username: <input type="text" name="username" required> <br>
-			Password: <input type='password' name="password" required> <br> 
-			<input id="loginButton" type="button" value="LOGIN">
-			<p id="error"></p>
-		</fieldset>
-	</form>
+	<div align="center">
+		<h1>Benvenuto al sito per la gestione delle riunioni!</h1>
+		<h2>Completa il form per effettuare il login</h2>
+		<form action="#">
+			<fieldset>
+				Username: <input type="text" name="username" required> <br>
+				Password: <input type='password' name="password" required> <br> 
+				<input id="loginButton" type="button" value="LOGIN">
+				<p id="error"></p>
+			</fieldset>
+		</form>
+		<h2>Non sei ancora registrato?</h2><br>
+		<input id="registerButton" type="button" value="REGISTRATI">
+	</div>
+	<div id="register_modal" class="register_modal">
+		<div id="register_modal_content" class="register_modal_content" align="center">
+			<span id="close_register" class="close_register">&times;</span>
+			<div id="register_error" class="register_error"></div>
+			<form action="#" name="register_form">
+				Username: <input type="text" name="username" required> <br>
+				Password: <input type="password" name="password" required> <br>
+				Conferma Password: <input type="password" name="confermaPassword" required> <br>
+				Mail: <input type="email" name="mail" required> <br>
+				Nome: <input type="text" name="nome" required> <br>
+				Cognome: <input type="text" name="cognome" required> <br>
+				Data di Nascita: <input type="date" name="data_nascita" id="data_nascita" required> <br>
+				<input id="registerSubmit" type="button" value="REGISTRATI">
+			</form>
+		</div>
+	</div>
 </body>
 </html>
