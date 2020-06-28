@@ -261,8 +261,22 @@
 				button.onclick = function() {
 					var diff = listaID.length - document.forms["creation_form"]["numero_max_partecipanti"].value;
 					
-					if (document.forms["creation_form"]["numero_max_partecipanti"].value <= 0) {
-						self.alert.textContent = "Numero di partecipanti non valido!";
+					var time = document.forms["creation_form"]["ora"].value;
+					var date = document.forms["creation_form"]["data"].value;
+					var durata = document.forms["creation_form"]["durata"].value;
+					
+					var durataSplit = durata.split(":");
+					
+					var timeStamp = new Date(date + "T" + time);
+					var offset = durataSplit[0] * 3600 * 1000 + durataSplit[1] * 60 * 1000;
+					
+					timeStamp.setTime(timeStamp.getTime() + durataSplit[0] * 60 * 60 * 1000 + durataSplit[1] * 60 * 1000);
+					
+					if (document.forms["creation_form"]["numero_max_partecipanti"].value <= 0 || timeStamp < Date.now()) {
+						self.alert.textContent = "Controlla che i dati inseriti nel form siano validi!";
+					}
+					else if (listaID.length == 0){
+						self.alert.textContent = "Devi invitare almeno una persona!";
 					}
 					else if (listaID.length > document.forms["creation_form"]["numero_max_partecipanti"].value) {
 						self.alert.textContent = "Numero massimo di persone superato! Rimuovi " + diff + " partecipanti.";
