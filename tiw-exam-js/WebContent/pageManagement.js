@@ -7,13 +7,13 @@
 		pageOrchestrator.refresh();
 	}, false);
 	
-	function ListaRiunioniInvitato (_alert, _listcontainer, _listcontainerbody){
-	    this.alert = _alert
-		this.listcontainer = _listcontainer;
-	    this.listcontainerbody = _listcontainerbody;
+	function ListaRiunioniInvitato (_alert, _content, _contentbody){
+	    this.alert = _alert;
+		this.content = _content;
+	    this.contentbody = _contentbody;
 		
 	    this.reset = function(){
-	    	this.listcontainer.style.visibility = "hidden";
+	    	this.content.style.visibility = "hidden";
 	    }
 	    
 	    this.show = function(next){								//Recupera la lista delle riunioni a cui è stato invitato l'utente
@@ -36,12 +36,12 @@
 	    };
 	    
 	    this.update = function(arrayRiunioni){
-	    	var l = arrayRiunioni.lenght,
+	    	var l = arrayRiunioni.length,
 	    		row, idCell, titoloCell, dataCell, oraCell, durataCell, numCell, hostCell;
 	    	if(l == 0){
-	    		alert.textContent = "Non ci sono Riunioni";
+	    		alert.textContent = "Non ci sono Riunioni!";
 	    	}else{
-	    		this.listcontainerbody.innerHTML = "";
+	    		this.contentbody.innerHTML = "";
 	    		var self = this;
 	    		arrayRiunioni.forEach(function(riunione){
 	    			row = document.createElement("tr");
@@ -66,21 +66,21 @@
 	    			hostCell = document.createElement("td");
 	    			hostCell.textContent = riunione.host;
 	    			row.appendChild(hostCell);
-	    			self.listcontainerbody.appendChild(row);
+	    			self.contentbody.appendChild(row);
 	    		});
 	    		
 	    	}  
-	    	this.listcontainer.style.visibility = "visible";
+	    	this.content.style.visibility = "visible";
 	    }
 	}
 	
-	function ListaRiunioniIndette(_alert, _listcontainer, _listcontainerbody){
-		this.alert = _alert
-		this.listcontainer = _listcontainer;
-	    this.listcontainerbody = _listcontainerbody;
+	function ListaRiunioniIndette(_alert, _content, _contentbody){
+		this.alert = _alert;
+		this.content = _content;
+	    this.contentbody = _contentbody;
 		
 	    this.reset = function(){
-	    	this.listcontainer.style.visibility = "hidden";
+	    	this.content.style.visibility = "hidden";
 	    }
 	    
 	    this.show = function(next){								//Recupera la lista delle riunioni a cui è stato invitato l'utente
@@ -103,12 +103,12 @@
 	    };
 	    
 	    this.update = function(arrayRiunioni){
-	    	var l = arrayRiunioni.lenght,
+	    	var l = arrayRiunioni.length,
 	    		row, idCell, titoloCell, dataCell, oraCell, durataCell, numCell;
 	    	if(l == 0){
-	    		alert.textContent = "Non ci sono Riunioni";
+	    		this.alert.textContent = "Non ci sono Riunioni!";
 	    	}else{
-	    		this.listcontainerbody.innerHTML = "";
+	    		this.contentbody.innerHTML = "";
 	    		var self = this;
 	    		arrayRiunioni.forEach(function(riunione){
 	    			row = document.createElement("tr");
@@ -130,18 +130,18 @@
 	    			numCell = document.createElement("td");
 	    			numCell.textContent = riunione.num_max_partecipanti;
 	    			row.appendChild(numCell);
-	    			self.listcontainerbody.appendChild(row);
+	    			self.contentbody.appendChild(row);
 	    		});
 	    		
 	    	}  
-	    	this.listcontainer.style.visibility = "visible";
+	    	this.content.style.visibility = "visible";
 	    }
 	}
 	
-	function ListaInviti(_alert, _listcontainer, _listcontainerbody) {
+	function ListaInviti(_alert, _content, _contentbody) {
 		this.alert = _alert;
-		this.listcontainer = _listcontainer;
-	    this.listcontainerbody = _listcontainerbody;
+		this.content = _content;
+	    this.contentbody = _contentbody;
 	    var listaID = new Array();
 		
 		document.getElementById("creariunione").addEventListener('click', (e) => {
@@ -166,7 +166,7 @@
 			pageOrchestrator.refresh();
 		});
 			
-		this.show = function(next){								//Recupera la lista delle riunioni a cui è stato invitato l'utente
+		this.show = function(next){	
 	    	var self = this;
 	    	asyncCall("GET",'GetInvitati', null,
 	    		function (request){
@@ -189,9 +189,9 @@
 			var l = listaInvitati.length,
 				row, idCell, nomeCell, cognomeCell, checkBox;
 			if (l == 0) {
-				alert.textContent = "Non ci sono persone da invitare.";
+				this.alert.textContent = "Non ci sono persone da invitare.";
 			} else {
-				this.listcontainerbody.innerHTML = "";
+				this.contentbody.innerHTML = "";
 				var self = this;
 				document.getElementById("modal-inner").style.visibility = "visible";
 				document.getElementById("modal-bottom").style.visibility = "visible";
@@ -214,7 +214,7 @@
     			checkBox.textContent = "Da Invitare";
     			row.appendChild(checkBox);
     			
-    			self.listcontainerbody.appendChild(row);
+    			self.contentbody.appendChild(row);
 				
 				listaInvitati.forEach(function(invitato) {
 					
@@ -246,7 +246,7 @@
 	    			};
 	    			row.appendChild(checkBox);
 	    			
-	    			self.listcontainerbody.appendChild(row);
+	    			self.contentbody.appendChild(row);
 	    			
 				});
 				
@@ -319,14 +319,14 @@
 				
 				row.appendChild(button);
 				
-				self.listcontainerbody.appendChild(row);
+				self.contentbody.appendChild(row);
 			}
-	    	this.listcontainer.style.visibility = "visible";
+	    	this.content.style.visibility = "visible";
 	    	
 		};
 		
 		this.reset = function(){
-	    	this.listcontainer.style.visibility = "hidden";
+	    	this.content.style.visibility = "hidden";
 	    	document.getElementById("alert_modale").innerHTML = "";
 	    	numeroTentativi = 0;
 	    	listaID = new Array();
@@ -344,6 +344,7 @@
 		this.start = function(){
 			var data = document.getElementById("id_data");
 			data.min = new Date().toISOString().split("T")[0];
+			alertContainer.style.visibility = "visible";
 			
 			listaRiunioniInvitato = new ListaRiunioniInvitato(
 					alertContainer,
