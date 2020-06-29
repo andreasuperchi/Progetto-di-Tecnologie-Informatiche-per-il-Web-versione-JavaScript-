@@ -53,7 +53,7 @@ public class RegistraUtente extends HttpServlet {
 				response.setStatus(HttpServletResponse.SC_OK);
 			} catch(SQLException e) {
 				response.setStatus(HttpServletResponse.SC_BAD_GATEWAY);
-				response.getWriter().println("Errore durante la registrazione dell'utente nel database!");
+				response.getWriter().println("Errore durante la registrazione dell'utente nel database! Username o mail già registrati");
 			}
 		}
 	}
